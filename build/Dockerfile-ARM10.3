@@ -1,0 +1,26 @@
+FROM ubuntu
+
+RUN apt update \
+   && apt -y install git make curl bzip2 apt-utils xxd \
+   && rm -rf /var/lib/apt/lists/*
+
+RUN git config --global advice.detachedHead false
+
+ARG DL_DIR="/download"
+ARG TOOLS_DIR="/tools"
+ARG ARM_SDK_DIR="${TOOLS_DIR}/gcc-arm-none-eabi-10.3-2021.10"
+ARG ARM_SDK_FILE="gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2"
+ARG ARM_SDK_URL="https://developer.arm.com/-/media/Files/downloads/gnu-rm/10.3-2021.10/${ARM_SDK_FILE}"
+
+RUN mkdir -p /tools
+RUN mkdir -p ${DL_DIR}
+
+RUN curl -L -k -o "${DL_DIR}/${ARM_SDK_FILE}" "${ARM_SDK_URL}"
+
+RUN tar -C ${TOOLS_DIR} -xjf "${DL_DIR}/${ARM_SDK_FILE}"
+
+ENV PATH="${PATH}:${ARM_SDK_DIR}/bin"
+
+RUN rm "${DL_DIR}/${ARM_SDK_FILE}"
+
+RUN ${ARM_SDK_DIR}/bin/arm-none-eabi-gcc -dumpversion
