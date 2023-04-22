@@ -40,7 +40,7 @@ docker run betaflight/cloudbuild:master /build/build.sh master BETAFLIGHTF4
 
 If you want the `build.sh` script to move any produced hex files to a specific location, you can do so by adding a mount to the container.
 
-example (replace {TEMP} with your local directory):
+example (replace `{TEMP}` with your local directory, that is outside the container):
 
 ```
 
