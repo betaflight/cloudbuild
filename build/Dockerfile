@@ -17,3 +17,5 @@ RUN git pull origin ${COMMIT}:${COMMIT}
 
 WORKDIR /build
 COPY build.sh .
+
+RUN chmod +x ./build.sh
