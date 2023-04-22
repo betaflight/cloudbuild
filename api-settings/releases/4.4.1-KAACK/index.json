@@ -1,0 +1,14 @@
+{
+  "Release": "4.4.1-KAACK",
+  "Date": "11-Apr-2023 00:00",
+  "Label": "special-release",
+  "Type": "Unstable",
+  "ReleaseUrl": "",
+  "CloudBuild": true,
+  "UnifiedConfig": true,
+  "Tag": "KAACK",
+  "Branch": "RPM_KAACK",
+  "Withdrawn": false,
+  "SortKey": "0.0.0:11-Apr-2023",
+  "Repository": "limonspb/betaflight"
+}

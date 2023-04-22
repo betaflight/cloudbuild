@@ -1,0 +1,54 @@
+{
+    "RadioProtocols": [
+        {"Value": "USE_SERIALRX_DEFAULT", "Name": "CRSF,GHST,SBUS", "Default": true},
+        {"Value": "USE_SERIALRX_CRSF", "Name": "CRSF"},
+        {"Value": "USE_SERIALRX_FPORT", "Name": "FPORT"},
+        {"Value": "USE_SERIALRX_GHST", "Name": "GHOST"},
+        {"Value": "USE_SERIALRX_IBUS", "Name": "IBUS"},
+        {"Value": "USE_SERIALRX_JETIEXBUS", "Name": "JETIEXBUS"},
+        {"Value": "USE_RX_PPM", "Name": "PPM"},
+        {"Value": "USE_SERIALRX_SBUS", "Name": "SBUS"},
+        {"Value": "USE_SERIALRX_SPEKTRUM", "Name": "SPEKTRUM"},
+        {"Value": "USE_SERIALRX_SRXL2", "Name": "SRXL2"},
+        {"Value": "USE_SERIALRX_SUMD", "Name": "SUMD"},
+        {"Value": "USE_SERIALRX_SUMH", "Name": "SUMH"},
+        {"Value": "USE_SERIALRX_XBUS", "Name": "XBUS"}
+    ],
+    "TelemetryProtocols":[
+        {"Value": "", "Name": "[None]"},
+        {"Value": "USE_TELEMETRY_FRSKY_HUB", "Name": "FRSKY_HUB"},
+        {"Value": "USE_TELEMETRY_HOTT", "Name": "HOTT"},
+        {"Value": "USE_TELEMETRY_IBUS_EXTENDED", "Name": "IBUS EXTENDED"},
+        {"Value": "USE_TELEMETRY_LTM", "Name": "LTM"},
+        {"Value": "USE_TELEMETRY_MAVLINK", "Name": "MAVLINK"},
+        {"Value": "USE_TELEMETRY_SMARTPORT", "Name": "SMARTPORT"},
+        {"Value": "USE_TELEMETRY_SRXL", "Name": "SRXL"}
+    ],
+    "GeneralOptions":[
+        {"Value": "USE_ACRO_TRAINER", "Name": "Acro Trainer"},
+        {"Value": "USE_AKK_SMARTAUDIO", "Name": "AKK (SA FIX)"},
+        {"Value": "USE_BATTERY_CONTINUE", "Name": "Batt. Continue"},
+        {"Value": "USE_CAMERA_CONTROL", "Name": "Cam. Control"},
+        {"Value": "USE_DASHBOARD", "Name": "Dashboard"},
+        {"Value": "USE_EMFAT_TOOLS", "Name": "EMFAT (AutoRun, Icon)"},
+        {"Value": "USE_ESCSERIAL_SIMONK", "Name": "ESC Serial (SK) inc. 4way"},
+        {"Value": "USE_FRSKYOSD", "Name": "FrSky OSD"},
+        {"Value": "USE_GPS", "Name": "GPS", "Default": true},
+        {"Value": "USE_LED_STRIP", "Name": "LED Strip", "Default": true},
+        {"Value": "USE_LED_STRIP_64", "Name": "LED Strip (64)"},
+        {"Value": "USE_MAG", "Name": "Magnetometers"},
+        {"Value": "USE_OSD_SD", "Name": "OSD (SD)", "Default": true},
+        {"Value": "USE_OSD_HD", "Name": "OSD (HD)", "Default": true},
+        {"Value": "USE_PINIO", "Name": "Pin IO", "Default": true},
+        {"Value": "USE_SERVOS", "Name": "Servos"},
+        {"Value": "USE_VTX", "Name": "VTX", "Default": true}
+    ],
+    "MotorProtocols":[
+        {"Value": "USE_BRUSHED", "Name": "BRUSHED"},
+        {"Value": "USE_DSHOT", "Name": "DSHOT", "Default": true},
+        {"Value": "USE_MULTISHOT", "Name": "MULTISHOT"},
+        {"Value": "USE_ONESHOT", "Name": "ONESHOT"},
+        {"Value": "USE_PROSHOT", "Name": "PROSHOT"},
+        {"Value": "USE_PWM_OUTPUT", "Name": "PWM"}
+    ]
+}
