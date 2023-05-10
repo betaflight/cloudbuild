@@ -18,4 +18,4 @@ fi
 
 echo "using ${TAG} -> ${BRANCH} (${REPO})"
 
-docker build ./build -f build/Dockerfile --tag "betaflight/cloudbuild:${TAG}" --build-arg NOCACHE=$(date +%s) --build-arg COMMIT=${BRANCH} --build-arg REPO=${REPO}
+docker build ./build/4.4.0 -f build/4.4.0/Dockerfile --tag "betaflight/cloudbuild:${TAG}" --build-arg NOCACHE=$(date +%s) --build-arg COMMIT=${BRANCH} --build-arg REPO=${REPO}
