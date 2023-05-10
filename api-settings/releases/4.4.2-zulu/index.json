@@ -1,0 +1,12 @@
+{
+  "Release": "4.4.2-zulu",
+  "Date": "10-May-2023 00:00",
+  "Label": "pre-release",
+  "Type": "Unstable",
+  "ReleaseUrl": "",
+  "CloudBuild": true,
+  "UnifiedConfig": true,
+  "Tag": "4.4.2",
+  "Branch": "4.4-maintenance",
+  "Withdrawn": false
+}
