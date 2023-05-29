@@ -3,7 +3,7 @@ name: CI - Upload Release index.json to API
 on:
   push:
     branches:
-      - 'main'
+      - 'master'
     paths:
       - 'api-settings/releases/**'
 
