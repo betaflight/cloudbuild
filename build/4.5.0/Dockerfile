@@ -1,4 +1,4 @@
-FROM betaflight/cloudbuild:ARM10.3
+FROM betaflight/cloudbuild:ARM9.3
 
 ARG COMMIT="master"
 ARG REPO="https://github.com/betaflight/betaflight.git"
