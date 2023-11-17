@@ -8,5 +8,5 @@
   "UnifiedConfig": true,
   "Tag": "4.4-maintenance",
   "Branch": "4.4-maintenance",
-  "Withdrawn": false
+  "Withdrawn": true
 }
