@@ -1,0 +1,12 @@
+{
+  "Release": "4.5.0-RC2",
+  "Type": "ReleaseCandidate",
+  "Date": "08-Jan-2024 00:00",
+  "Label": "08-Jan-2024",
+  "ReleaseUrl": "https://github.com/betaflight/betaflight/releases/tag/4.5.0-RC2",
+  "CloudBuild": true,
+  "UnifiedConfig": false,
+  "Withdrawn": false,
+  "Tag": "master",
+  "Branch": "4.5.0-RC2"
+}
