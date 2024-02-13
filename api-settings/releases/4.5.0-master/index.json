@@ -1,7 +1,7 @@
 {
   "Release": "4.5.0-master",
   "Date": "31-Dec-9999 00:00",
-  "Label": "latest dev build",
+  "Label": "latest dev",
   "Type": "Unstable",
   "ReleaseUrl": "",
   "CloudBuild": true,
