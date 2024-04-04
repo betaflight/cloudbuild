@@ -1,0 +1,11 @@
+{
+  "Release": "4.6.0-dev",
+  "Date": "31-Dec-9999 00:00",
+  "Label": "latest",
+  "Type": "Unstable",
+  "ReleaseUrl": "",
+  "CloudBuild": true,
+  "UnifiedConfig": false,
+  "Tag": "master",
+  "Branch": "master"
+}

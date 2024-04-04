@@ -1,0 +1,11 @@
+{
+  "Release": "4.5.0",
+  "Date": "07-Apr-2024 00:00",
+  "Label": "07-Apr-2024",
+  "Type": "Stable",
+  "ReleaseUrl": "https://github.com/betaflight/betaflight/releases/tag/4.5.0",
+  "CloudBuild": true,
+  "UnifiedConfig": false,
+  "Tag": "4.5.0",
+  "Branch": "4.5.0"
+}
