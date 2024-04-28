@@ -1,5 +1,5 @@
 {
-  "Release": "4.5.0-dev",
+  "Release": "4.6.0-dev",
   "Date": "31-Dec-9999 00:00",
   "Label": "latest",
   "Type": "Unstable",
@@ -7,6 +7,5 @@
   "CloudBuild": true,
   "UnifiedConfig": false,
   "Tag": "master",
-  "Branch": "master",
-  "Withdrawn": true
+  "Branch": "master"
 }
