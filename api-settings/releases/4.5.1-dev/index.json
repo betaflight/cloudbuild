@@ -5,7 +5,7 @@
   "Type": "Unstable",
   "ReleaseUrl": "",
   "CloudBuild": true,
-  "UnifiedConfig": true,
+  "UnifiedConfig": false,
   "Tag": "4.5-maintenance",
   "Branch": "4.5-maintenance",
   "Withdrawn": false
