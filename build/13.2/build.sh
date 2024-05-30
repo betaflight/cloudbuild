@@ -18,12 +18,16 @@ cd /source
 git checkout -f CLOUD_HEAD || { echo "checkout failed with $?"; exit 1; }
 [ $? == 1 ] && exit 0;
 
-echo ""
-echo "Commencing the build (make ${TARGET}):"
+if [[ -d "/source/src/config" ]] ; then
 
 cd /source
 make configs || { echo "make configs failed with $?"; exit 1; }
 [ $? == 1 ] && exit 0;
+
+fi
+
+echo ""
+echo "Commencing the build (make ${TARGET}):"
 
 cd /source
 make $TARGET EXTRA_FLAGS="${FLAGS}" || { echo "make failed with $?"; exit 1; }

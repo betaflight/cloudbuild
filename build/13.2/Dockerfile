@@ -1,4 +1,4 @@
-FROM betaflight/cloudbuild:ARM10.3
+FROM betaflight/cloudbuild:ARM13.2
 
 ARG COMMIT="master"
 ARG REPO="https://github.com/betaflight/betaflight.git"
@@ -15,9 +15,11 @@ ARG NOCACHE="1"
 
 RUN git pull origin ${COMMIT}:${COMMIT}
 
-RUN make configs
-
 WORKDIR /build
 COPY build.sh .
 
 RUN chmod +x ./build.sh
+
+WORKDIR /source
+
+RUN make configs
