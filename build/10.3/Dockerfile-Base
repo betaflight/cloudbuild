@@ -19,7 +19,7 @@ RUN curl -L -k -o "${DL_DIR}/${ARM_SDK_FILE}" "${ARM_SDK_URL}"
 
 RUN tar -C ${TOOLS_DIR} -xjf "${DL_DIR}/${ARM_SDK_FILE}"
 
-ENV PATH="${PATH}:${ARM_SDK_DIR}/bin"
+ENV TOOLS_DIR="${TOOLS_DIR}"
 
 RUN rm "${DL_DIR}/${ARM_SDK_FILE}"
 
