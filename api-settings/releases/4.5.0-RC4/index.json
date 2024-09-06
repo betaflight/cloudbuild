@@ -6,7 +6,7 @@
   "ReleaseUrl": "https://github.com/betaflight/betaflight/releases/tag/4.5.0-RC4",
   "CloudBuild": true,
   "UnifiedConfig": false,
-  "Withdrawn": false,
+  "Withdrawn": true,
   "Tag": "master",
   "Branch": "4.5.0-RC4"
 }
