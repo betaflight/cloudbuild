@@ -1,0 +1,26 @@
+FROM betaflight/cloudbuild:ARM10.3
+
+RUN apt update \
+   && apt -y install git make curl bzip2 xz-utils apt-utils xxd \
+   && rm -rf /var/lib/apt/lists/*
+
+RUN git config --global advice.detachedHead false
+
+ARG DL_DIR="/download"
+ARG TOOLS_DIR="/tools"
+ARG ARM_SDK_DIR="${TOOLS_DIR}/arm-gnu-toolchain-13.2.Rel1-x86_64-arm-none-eabi"
+ARG ARM_SDK_FILE="arm-gnu-toolchain-13.2.rel1-x86_64-arm-none-eabi.tar.xz"
+ARG ARM_SDK_URL="https://developer.arm.com/-/media/Files/downloads/gnu/13.2.rel1/binrel/arm-gnu-toolchain-13.2.rel1-x86_64-arm-none-eabi.tar.xz?rev=e434b9ea4afc4ed7998329566b764309&hash=CA590209F5774EE1C96E6450E14A3E26"
+
+RUN mkdir -p /tools
+RUN mkdir -p ${DL_DIR}
+
+RUN curl -L -k -o "${DL_DIR}/${ARM_SDK_FILE}" "${ARM_SDK_URL}"
+
+RUN tar -C ${TOOLS_DIR} -xf "${DL_DIR}/${ARM_SDK_FILE}"
+
+ENV TOOLS_DIR="${TOOLS_DIR}"
+
+RUN rm "${DL_DIR}/${ARM_SDK_FILE}"
+
+RUN ${ARM_SDK_DIR}/bin/arm-none-eabi-gcc -dumpversion
