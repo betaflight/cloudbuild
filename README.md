@@ -9,7 +9,8 @@ A Docker base image for building [Betaflight](https://github.com/betaflight/beta
 
 The base image (`betaflight/cloudbuild:base`) includes:
 
-- **ARM GNU Toolchain 13.3.Rel1** - cross-compiler for all ARM targets
+- **ARM GNU Toolchain 10.3-2021.10** - cross-compiler for 4.4.x and 4.5.x targets
+- **ARM GNU Toolchain 13.3.Rel1** - cross-compiler for 2025.12.x+ targets
 - **clang-18** - blocks runtime support
 - **cmake / gcc / g++** - required for building platform tools (e.g. picotool)
 - **python3-intelhex** - hex/dfu conversion
