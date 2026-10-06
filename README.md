@@ -1,76 +1,77 @@
-# Docker Betaflight Cloud Build
-[![Docker Pulls](https://img.shields.io/docker/pulls/betaflight/cloudbuild.svg)](https://hub.docker.com/r/betaflight/cloudbuild/) [![Docker Stars](https://img.shields.io/docker/stars/betaflight/cloudbuild.svg)](https://hub.docker.com/r/betaflight/cloudbuild/) [![License](https://img.shields.io/badge/license-GPL--3.0-blue.svg?style=flat)](https://github.com/betaflight/cloudbuild/blob/master/LICENSE)
+# Betaflight Build
+[![Docker Pulls](https://img.shields.io/docker/pulls/betaflight/betaflight-build.svg)](https://hub.docker.com/r/betaflight/betaflight-build/) [![Docker Stars](https://img.shields.io/docker/stars/betaflight/betaflight-build.svg)](https://hub.docker.com/r/betaflight/betaflight-build/) [![License](https://img.shields.io/badge/license-GPL--3.0-blue.svg?style=flat)](https://github.com/betaflight/betaflight-build/blob/master/LICENSE)
 
-_(Markdown optimised for display in [Dockerhub](https://hub.docker.com/r/betaflight/cloudbuild).)_
+_(Markdown optimised for display in [Docker Hub](https://hub.docker.com/r/betaflight/betaflight-build).)_
 
-A Docker base image for building [Betaflight](https://github.com/betaflight/betaflight) firmware. Supports all target platforms including STM32 (F4/F7/G4/H5/H7/N6) and PICO (RP2350).
+Docker images containing the toolchains needed to build [Betaflight](https://github.com/betaflight/betaflight) firmware, one image per platform SDK. Mount your own Betaflight checkout and run `make` as you would locally, with no toolchain installation required.
 
-## Toolchain
+The toolchains are installed by Betaflight's own build system (`make SDK=<sdk> platform-tools-install`), so each image matches exactly what the Betaflight version it was built from expects.
 
-The base image (`betaflight/cloudbuild:base`) includes:
+## Tags
 
-- **ARM GNU Toolchain 10.3-2021.10** - cross-compiler for 4.4.x and 4.5.x targets
-- **ARM GNU Toolchain 13.3.Rel1** - cross-compiler for 2025.12.x+ targets
-- **clang-18** - blocks runtime support
-- **cmake / gcc / g++** - required for building platform tools (e.g. picotool)
-- **python3-intelhex** - hex/dfu conversion
+`betaflight/betaflight-build:<sdk>-<version>`
 
-SDK submodules (PICO SDK, STM32CubeN6) are hydrated automatically by the Betaflight build system when needed.
+| SDK | Platforms |
+| --- | --- |
+| `arm` | STM32F4/F7/G4/H7, AT32 and other ARM targets without a vendor SDK |
+| `stm32h5`, `stm32c5`, `stm32n6` | STM32H5, STM32C5, STM32N6 |
+| `apm32f4` | APM32F4 |
+| `x32m7` | X32M7 |
+| `pico_sdk` | RP2350 (PICO) |
+| `esp_idf` | ESP32 |
+
+`<version>` is the Betaflight branch the image was built from, e.g. `master`, `2026.6`, `2025.12`, `4.5`. The bare `<sdk>` tag (e.g. `arm`) tracks `master`.
+
+Releases before 2025.12 (4.4, 4.5) only have the `arm` image.
+
+Images are published for `linux/amd64` and `linux/arm64`.
 
 ## Usage
 
-### Install Docker
-The latest docker platform is available from [https://www.docker.com/](https://www.docker.com/products/overview#/install_the_platform).
-
-### Building the images
-
-Build the base image and a tagged build image:
+From the root of a Betaflight checkout:
 
 ```
-./build-image.sh master
+docker run --rm -u $(id -u):$(id -g) -v "$PWD":/src betaflight/betaflight-build:arm make STM32F405
 ```
 
-Build a specific branch with a custom tag:
+Build artifacts (`.hex`, `.uf2`, `.bin`) are written to `obj/` in your checkout. Running as your own user (`-u`) keeps them owned by you.
+
+Configuration based targets work the same way:
 
 ```
-./build-image.sh 4.6-maintenance 4.6.X
+docker run --rm -u $(id -u):$(id -g) -v "$PWD":/src betaflight/betaflight-build:arm sh -c "make configs && make CONFIG=MATEKF405AIO"
+```
+
+Platform SDK submodules are hydrated automatically by the Betaflight build system on first use.
+
+To find which SDK a target needs:
+
+```
+make BUILD=RP2350B build-sdk-print
+```
+
+Unit tests (`make test`) can be run in any of the images.
+
+## Building the images
+
+Build images for every SDK of a Betaflight branch:
+
+```
+./build-image.sh -r 2025.12-maintenance
+```
+
+Build specific SDKs:
+
+```
+./build-image.sh arm pico_sdk
 ```
 
 Build from a fork:
 
 ```
-./build-image.sh master custom-tag https://github.com/user/betaflight.git
+./build-image.sh -R https://github.com/user/betaflight.git -r my-branch arm
 ```
 
-### Running a build
+`-p` builds for `linux/amd64` and `linux/arm64` and pushes to the registry. Set `IMAGE` to publish under a different name.
 
-`{tag}`:     the image tag relating to the release you want to build.
-
-`{release}`: the release or branch / commit hash that you want to build.
-
-`{target}`:  the target to build e.g. BETAFLIGHTF4.
-
-`{flags}`:   any additional "EXTRA_FLAGS" you want to pass for the build.
-
-
-```
-docker run betaflight/cloudbuild:{tag} /build/build.sh {release} {target} "{flags}"
-```
-
-examples:
-
-```
-docker run betaflight/cloudbuild:master /build/build.sh master BETAFLIGHTF4
-```
-
-```
-docker run betaflight/cloudbuild:master /build/build.sh 445758f3ec351b07c1ea77e4883a7cd4804fc7ad BETAFLIGHTF4 "-D'RELEASE_NAME=4.6.0' -DCLOUD_BUILD"
-```
-
-To copy produced build artifacts to a local directory, add a volume mount:
-
-```
-docker run -v /tmp/output:/output betaflight/cloudbuild:master /build/build.sh master BETAFLIGHTF4
-```
-
-Build artifacts (`.hex`, `.uf2`) will be copied to the mounted directory.
+Images are published to Docker Hub by the [Publish](https://github.com/betaflight/betaflight-build/actions/workflows/publish.yml) workflow on every push to `master`, weekly, and on demand for any Betaflight branch.

@@ -1,70 +1,73 @@
-# Betaflight Cloud Build - Base Image
-#
-# Provides all toolchains and dependencies required to build any
-# Betaflight target (STM32F4/F7/G4/H5/H7/N6, PICO RP2350).
-#
-# ARM GNU Toolchain 10.3-2021.10  (4.4.x, 4.5.x)
-# ARM GNU Toolchain 13.3.Rel1    (2025.12.x+)
-#
-
-FROM docker.io/library/debian:13-slim
+FROM docker.io/library/debian:13-slim AS base
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install base build tools
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    git \
+    bzip2 \
     ca-certificates \
-    make \
+    clang-18 \
     cmake \
     curl \
-    xz-utils \
-    xxd \
-    gcc \
     g++ \
-    python3-intelhex \
+    gcc \
+    git \
     libblocksruntime-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install clang-18 (required for blocks runtime support)
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    clang-18 \
-    llvm-18-dev \
     libc++-18-dev \
     libc++abi-18-dev \
     libclang-rt-18-dev \
+    libusb-1.0-0 \
+    llvm-18-dev \
+    make \
+    python3 \
+    python3-intelhex \
+    python3-venv \
+    unzip \
+    xxd \
+    xz-utils \
     && rm -rf /var/lib/apt/lists/* \
     && update-alternatives --install /usr/bin/clang clang /usr/bin/clang-18 100 \
     && update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-18 100
 
-# Install ARM GNU Toolchain 10.3-2021.10 (for 4.4.x and 4.5.x)
-ARG TOOLS_DIR="/tools"
-ARG ARM_SDK_10_DIR="${TOOLS_DIR}/gcc-arm-none-eabi-10.3-2021.10"
-ARG ARM_SDK_10_FILE="gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2"
-ARG ARM_SDK_10_URL="https://developer.arm.com/-/media/Files/downloads/gnu-rm/10.3-2021.10/gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2"
+RUN git config --system safe.directory '*' && \
+    git config --system advice.detachedHead false
 
-RUN mkdir -p ${TOOLS_DIR} && \
-    curl -L -k -o "/tmp/${ARM_SDK_10_FILE}" "${ARM_SDK_10_URL}" && \
-    tar -C ${TOOLS_DIR} -xjf "/tmp/${ARM_SDK_10_FILE}" && \
-    rm "/tmp/${ARM_SDK_10_FILE}" && \
-    ${ARM_SDK_10_DIR}/bin/arm-none-eabi-gcc -dumpversion
+ENV TOOLS_DIR=/opt/betaflight/tools
 
-# Install ARM GNU Toolchain 13.3.Rel1 (for 2025.12.x+)
-ARG ARM_SDK_13_DIR="${TOOLS_DIR}/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi"
-ARG ARM_SDK_13_FILE="arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi.tar.xz"
-ARG ARM_SDK_13_URL="https://developer.arm.com/-/media/Files/downloads/gnu/13.3.rel1/binrel/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi.tar.xz"
+FROM base AS source
 
-RUN curl -L -k -o "/tmp/${ARM_SDK_13_FILE}" "${ARM_SDK_13_URL}" && \
-    tar -C ${TOOLS_DIR} -xf "/tmp/${ARM_SDK_13_FILE}" && \
-    rm "/tmp/${ARM_SDK_13_FILE}" && \
-    ${ARM_SDK_13_DIR}/bin/arm-none-eabi-gcc -dumpversion
+ARG BETAFLIGHT_REPO="https://github.com/betaflight/betaflight.git"
+ARG BETAFLIGHT_REF="master"
 
-ENV TOOLS_DIR="${TOOLS_DIR}"
+WORKDIR /betaflight
+RUN git init -q && \
+    git remote add origin "${BETAFLIGHT_REPO}" && \
+    git fetch -q --depth 1 origin "${BETAFLIGHT_REF}" && \
+    git checkout -q FETCH_HEAD
 
-RUN git config --global advice.detachedHead false
+FROM source AS tools
 
-WORKDIR /build
-COPY build.sh .
-RUN chmod +x ./build.sh
+ARG SDK="arm"
+
+# Tools are installed at their final path as the ESP-IDF python venv is not relocatable.
+RUN if [ "${SDK}" = "arm" ]; then \
+        make arm_sdk_install; \
+    else \
+        make SDK="${SDK}" platform-tools-install; \
+    fi && \
+    rm -rf "${TOOLS_DIR}/espressif/dist"
+
+FROM base
+
+ARG BETAFLIGHT_REF="master"
+ARG SDK="arm"
+
+LABEL org.opencontainers.image.title="betaflight-build" \
+      org.opencontainers.image.description="Betaflight firmware build toolchain (${SDK} SDK)" \
+      org.opencontainers.image.revision="${BETAFLIGHT_REF}" \
+      org.opencontainers.image.source="https://github.com/betaflight/betaflight-build" \
+      org.opencontainers.image.licenses="GPL-3.0"
+
+COPY --from=tools ${TOOLS_DIR} ${TOOLS_DIR}
+
+WORKDIR /src
